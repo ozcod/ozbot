@@ -2,23 +2,24 @@ import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { Pinecone as PineconeClient } from "@pinecone-database/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
-import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-import { TaskType } from "@google/generative-ai";
+import { JinaEmbeddings } from "@langchain/community/embeddings/jina";
 
-const embeddings = new GoogleGenerativeAIEmbeddings({
-  modelName: "embedding-001",
-  taskType: TaskType.RETRIEVAL_DOCUMENT,
+const embeddings = new JinaEmbeddings({
+  model: "jina-embeddings-v2-base-en",
+  apiKey: process.env.JINA_API_KEY,
 });
 
 const pinecone = new PineconeClient();
+
 const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX_NAME);
-const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+
+export const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
   pineconeIndex,
   maxConcurrency: 5,
 });
 
-export async function indexDocument(pdfpath) {
-  const loader = new PDFLoader(pdfpath, { splitPages: false });
+export async function indexTheDocument(filePath) {
+  const loader = new PDFLoader(filePath, { splitPages: false });
   const doc = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
@@ -31,9 +32,10 @@ export async function indexDocument(pdfpath) {
   const documents = texts.map((chunk) => {
     return {
       pageContent: chunk,
-      metadata: doc[0].metadata,
+      metadata: { source: doc[0].metadata?.source || filePath },
     };
   });
+
   await vectorStore.addDocuments(documents);
-  // console.log(document);
+  // console.log(documents);
 }
