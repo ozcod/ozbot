@@ -1,4 +1,5 @@
-import { indexDocument } from "./prepare.js";
+import { indexTheDocument } from "./prepare.js";
 
-const pdfPath = "./ozstudios_rag_internal_wiki.pdf";
-indexDocument(pdfPath);
+const filePath = process.env.FILE_PATH;
+
+await indexTheDocument(filePath);

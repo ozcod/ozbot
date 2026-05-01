@@ -9,8 +9,15 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@langchain/community": "^1.1.27",
-    "@langchain/core": "^1.1.39",
-    "pdf-parse": "^1"
+    "@langchain/core": "^1.1.42",
+    "@langchain/pinecone": "^0.2.0",
+    "@langchain/textsplitters": "^0.1.0",
+    "@pinecone-database/pinecone": "^6.1.2",
+    "chromadb": "^3.0.12",
+    "groq-sdk": "^1.1.2",
+    "install": "^0.13.0",
+    "pdf-parse": "^1.1.1"
   }
 }
