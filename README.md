@@ -64,7 +64,7 @@ You: What's the main point of chapter 3?
 
 Here's how the magic happens (or at least the architecture behind it):
 
-![RAG Design](src\img\rag_design.svg)
+![RAG Design](src/img/rag_design.svg)
 
 1. **PDF Loading** (`prepare.js`) - Reads PDF files
 2. **Text Splitting** - Breaks documents into 500-char chunks (overlapping by 100 chars so context doesn't get cut off)
